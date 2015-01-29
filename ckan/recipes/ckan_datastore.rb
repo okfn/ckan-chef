@@ -39,5 +39,5 @@ end
 
 execute "set permissions" do
   cwd CKAN_DIR
-  command "paster --plugin=ckan datastore set-permissions -c #{node[:ckan][:config_dir]}/development.ini | sudo -u postgres psql --set ON_ERROR_STOP=1"
+  command "paster datastore set-permissions postgres -c #{node[:ckan][:config_dir]}/development.ini"
 end

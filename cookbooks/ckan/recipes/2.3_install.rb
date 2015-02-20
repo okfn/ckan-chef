@@ -1,0 +1,8 @@
+include_recipe "apt"
+include_recipe "git"
+include_recipe "python"
+include_recipe "postgresql::server"
+include_recipe "postgresql::libpq"
+include_recipe "postgresql::client"
+include_recipe "java"
+include_recipe "ckan::ckan2.3_base"

@@ -9,4 +9,4 @@ cookbook 'java'
 cookbook 'nodejs'
 
 # project specific cookbooks
-cookbook "ckan",  path: "ckan"
+cookbook "ckan",  path: "cookbooks/ckan"

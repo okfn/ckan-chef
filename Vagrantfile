@@ -22,28 +22,10 @@ Vagrant.configure(2) do |config|
     vb.memory = "1024"
   end
 
-  config.vm.synced_folder "synced_folders/src", "/usr/lib/ckan/default/src",
-                          id: "ckan_src",
-                          owner: "vagrant",
-                          group: "vagrant",
-                          mount_options: ["dmode=775","fmode=664"],
-                          create: true
-  config.vm.synced_folder "synced_folders/config", "/etc/ckan/default",
-                          id: "ckan_config",
-                          owner: "vagrant",
-                          group: "vagrant",
-                          mount_options: ["dmode=775","fmode=664"],
-                          create: true
-  config.vm.synced_folder "synced_folders/file_storage", "/var/lib/ckan/default",
-                          id: "ckan_file_storage",
-                          owner: "vagrant",
-                          group: "www-data",
-                          mount_options: ["dmode=775","fmode=664"],
-                          create: true
-
   config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = ['cookbooks']
     chef.run_list = [
-      "recipe[ckan::default]",
+      "recipe[ckan::2.3_install]",
     ]
   end
 end

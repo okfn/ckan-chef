@@ -1,6 +1,4 @@
-# for development deploys using Vagrant, `[:ckan][:user]` must be 'vagrant' to ensure
-# synced_folders have correct permissions
-default[:ckan][:user] = "vagrant"
+default[:ckan][:user] = "ckan_user"
 default[:ckan][:project_name] = "default"
 default[:ckan][:site_url] = "http://default.ckanhosted.dev"
 default[:ckan][:solr_url] = "http://127.0.0.1:8983/solr"
@@ -15,8 +13,8 @@ default[:ckan][:datastore][:sql_user] = "datastore_#{default[:ckan][:project_nam
 default[:ckan][:datastore][:sql_db_name] = "datastore_#{default[:ckan][:project_name]}"
 
 # The CKAN version to install.
-default[:repository][:url] = "https://github.com/ckan/ckan.git"
-default[:repository][:commit] = "master"
+default[:ckan_package][:url] = "http://s138.okserver.org/build/"
+default[:ckan_package][:file_name] = "python-ckan_2.3-1_amd64.deb"
 
 # Apache config for production
 default[:apache][:server_name] = "default.ckanhosted.dev"

@@ -8,7 +8,6 @@ pkg/
 
 # Berkshelf
 .vagrant
-/cookbooks
 Berksfile.lock
 
 # Bundler
@@ -20,10 +19,3 @@ bin/*
 .kitchen.local.yml
 
 .DS_Store
-
-# Ignore everything in these directories
-synced_folders/*
-synced_folders/*
-synced_folders/*
-# Except this .gitkeep file
-!synced_folders/.gitkeep

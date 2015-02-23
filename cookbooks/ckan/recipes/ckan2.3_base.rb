@@ -80,10 +80,30 @@ end
 
 # CONFIGURATION FILE FOR CKAN
 #
+# move secrets template file to client
+chef_gem "uuidtools"
+template "/etc/ckan/#{node[:ckan][:project_name]}/deployment_secrets.erb" do
+  def set_uuid()
+    require "uuidtools"
+    return UUIDTools::UUID.random_create
+  end
+  def set_secret()
+    require "securerandom"
+    s = SecureRandom.base64(25)
+    badchars = ['\n', '\r', '=']
+    badchars.each {|badchar| s.gsub!(badchar, '')}
+    return s[0..24]
+  end
+  source "deployment_secrets.erb"
+  variables({
+    :app_instance_uuid => set_uuid(),
+    :app_instance_secret => set_secret()
+  })
+  action :create_if_missing
+end
 template "/etc/ckan/#{node[:ckan][:project_name]}/production.ini" do
   source "production.ini.2.3.erb"
 end
-
 
 # INSTALL AND CONFIGURE POSTGRES USERS AND TABLE
 #

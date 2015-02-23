@@ -27,14 +27,7 @@ full_stack = true
 cache_dir = /tmp/%(ckan.site_id)s/
 beaker.session.key = ckan
 
-# This is the secret token that the beaker library uses to hash the cookie sent
-# to the client. `paster make-config` generates a unique value for this each
-# time it generates a config file.
-beaker.session.secret = LHmZpfvXaImOM4hh5FgmGLpG1
-
-# `paster make-config` generates a unique value for this each time it generates
-# a config file.
-app_instance_uuid = {f842a972-3cbc-4ea6-b603-b977bfca21b7}
+<%= render "/etc/ckan/default/deployment_secrets.erb", :local => true %>
 
 # repoze.who config
 who.config_file = %(here)s/who.ini

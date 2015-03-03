@@ -14,7 +14,7 @@ default[:ckan][:datastore][:sql_db_name] = "datastore_#{default[:ckan][:project_
 
 # The CKAN version to install.
 default[:ckan_package][:url] = "http://s138.okserver.org/build/"
-default[:ckan_package][:file_name] = "python-ckan_2.3-1_amd64.deb"
+default[:ckan_package][:file_name] = "python-ckan_2.3-5_amd64.deb"
 
 # Apache config for production
 default[:apache][:server_name] = "default.ckanhosted.dev"

@@ -14,6 +14,9 @@ end
 package "libapache2-mod-wsgi" do
   action :install
 end
+package "libpq5" do
+  action :install
+end
 
 # INSTALL NGINX
 #
@@ -108,26 +111,41 @@ end
 # INSTALL AND CONFIGURE POSTGRES USERS AND TABLE
 #
 # Create Postgres User and Database
-postgresql_user node[:ckan][:sql_user] do
-  superuser true
+postgresql_connection_info = {
+  :host      => '127.0.0.1',
+  :port      => 5432,
+  :username  => 'postgres',
+  :password  => node['postgresql']['password']['postgres']
+}
+postgresql_database_user node[:ckan][:sql_user] do
+  connection postgresql_connection_info
   createdb true
+  superuser true
   login true
   password node[:ckan][:sql_password]
+  action :create
 end
 postgresql_database node[:ckan][:sql_db_name] do
+  connection postgresql_connection_info
   owner node[:ckan][:sql_user]
   encoding "utf8"
+  action :create
 end
+
 # Create read-only pg user and database for datastore
-postgresql_user node[:ckan][:datastore][:sql_user] do
-  superuser false
+postgresql_database_user node[:ckan][:datastore][:sql_user] do
+  connection postgresql_connection_info
   createdb false
+  superuser false
   login true
   password node[:ckan][:sql_password]
+  action :create
 end
 postgresql_database node[:ckan][:datastore][:sql_db_name] do
+  connection postgresql_connection_info
   owner node[:ckan][:sql_user]
   encoding "utf8"
+  action :create
 end
 execute "initialize ckan database" do
   command "sudo ckan db init"
@@ -162,4 +180,3 @@ service "nginx" do
   supports :restart => true, :reload => true
   action [:enable, :restart]
 end
-

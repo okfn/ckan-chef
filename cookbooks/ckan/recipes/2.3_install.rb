@@ -1,6 +1,5 @@
 include_recipe "apt"
 include_recipe "git"
-include_recipe "python"
 include_recipe "postgresql::server"
 include_recipe "postgresql::client"
 include_recipe "postgresql::ruby"

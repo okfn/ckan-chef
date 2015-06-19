@@ -53,6 +53,7 @@ template "/etc/apache2/sites-available/ckan_#{node[:ckan][:project_name]}" do
 end
 execute "disable default apache site" do
   command "sudo a2dissite default"
+  only_if { ::File.exists?("/etc/apache2/sites-enabled/000-default.conf")}
 end
 
 # CONFIGURE NGINX

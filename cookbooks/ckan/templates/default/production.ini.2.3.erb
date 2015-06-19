@@ -26,6 +26,8 @@ use = egg:ckan
 full_stack = true
 cache_dir = /tmp/%(ckan.site_id)s/
 beaker.session.key = ckan
+beaker.session.type = database
+beaker.session.url = %(sqlalchemy.url)s
 
 <%= render "/etc/ckan/default/deployment_secrets.erb", :local => true %>
 

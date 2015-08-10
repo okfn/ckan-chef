@@ -26,9 +26,15 @@ end
 
 # INSTALL .DEB TO /VAR/CHEF/CACHE (BUILD SERVER)
 #
+# `remote_file` for production, `cookbook_file` is useful for development
+# where the package is on the host machine. Comment out as approiate.
+
 remote_file "#{Chef::Config[:file_cache_path]}/#{node[:ckan_package][:file_name]}" do
   source "#{node[:ckan_package][:url]}#{node[:ckan_package][:file_name]}"
 end
+# cookbook_file "#{Chef::Config[:file_cache_path]}/#{node[:ckan_package][:file_name]}" do
+#   source "#{node[:ckan_package][:url]}#{node[:ckan_package][:file_name]}"
+# end
 dpkg_package "python-ckan_2.3" do
   action :install
   source "#{Chef::Config[:file_cache_path]}/#{node[:ckan_package][:file_name]}"
@@ -107,6 +113,16 @@ template "/etc/ckan/#{node[:ckan][:project_name]}/deployment_secrets.erb" do
 end
 template "/etc/ckan/#{node[:ckan][:project_name]}/production.ini" do
   source "production.ini.2.3.erb"
+  variables({
+    :project_name => node[:ckan][:project_name],
+    :site_url => node[:ckan][:site_url],
+    :sql_password => node[:ckan][:sql_password],
+    :sql_user => node[:ckan][:sql_user],
+    :sql_db_name => node[:ckan][:sql_db_name],
+    :ds_sql_user => node[:ckan][:datastore][:sql_user],
+    :ds_sql_db_name => node[:ckan][:datastore][:sql_db_name],
+    :file_storage_dir => node[:ckan][:file_storage_dir]
+  })
 end
 
 # INSTALL AND CONFIGURE POSTGRES USERS AND TABLE

@@ -4,7 +4,11 @@ This branch, fi-ware, is configured to deploy a production instance to fi-ware's
 
 A Vagrantfile is included for testing with chef-solo as provisioner.
 
+CKAN 2.3:
 Creates an Ubuntu 12.04 VM running Postgres 9.4, Solr, Jetty, CKAN (2.3) and Datastore.
+
+CKAN 2.5:
+Creates an Ubuntu 14.04 VM running Postgres 9.4, Solr, Jetty, CKAN (2.5) and Datastore.
 
 ## Installation
 
@@ -26,7 +30,7 @@ The production instance can be viewed with the host machine's browser at `http:/
 
 ### For Production
 
-Add `recipe[ckan::2.3_install]` to your run_list to install the dependencies needed for a production instance of CKAN that uses Apache/Nginx.
+Add `recipe[ckan::2.5_install]` to your run_list to install the dependencies needed for a production instance of CKAN that uses Apache/Nginx.
 
 ## Vagrant commands
 

@@ -129,48 +129,46 @@ end
 # INSTALL AND CONFIGURE POSTGRES USERS AND TABLE
 #
 # Create Postgres User and Database
-postgresql_connection_info = {
-  :host      => '127.0.0.1',
-  :port      => 5432,
-  :username  => 'postgres',
-  :password  => node['postgresql']['password']['postgres']
-}
-postgresql_database_user node[:ckan][:sql_user] do
-  connection postgresql_connection_info
-  createdb true
+postgresql_user node[:ckan][:sql_user] do
   superuser true
+  createdb true
   login true
   password node[:ckan][:sql_password]
-  action :create
 end
 postgresql_database node[:ckan][:sql_db_name] do
-  connection postgresql_connection_info
   owner node[:ckan][:sql_user]
-  encoding "utf8"
-  action :create
+  encoding "UTF-8"
+  template "template0"
+  locale "en_US.UTF-8"
 end
 
 # Create read-only pg user and database for datastore
-postgresql_database_user node[:ckan][:datastore][:sql_user] do
-  connection postgresql_connection_info
-  createdb false
+postgresql_user node[:ckan][:datastore][:sql_user] do
   superuser false
+  createdb false
   login true
   password node[:ckan][:sql_password]
-  action :create
 end
 postgresql_database node[:ckan][:datastore][:sql_db_name] do
-  connection postgresql_connection_info
   owner node[:ckan][:sql_user]
-  encoding "utf8"
-  action :create
+  encoding "UTF-8"
+  template "template0"
+  locale "en_US.UTF-8"
 end
-execute "initialize ckan database" do
-  command "sudo ckan db init"
+
+bash "set db permissions" do
+  cwd "#{CKAN_DIR}"
+  code <<-EOH
+  source #{ENV['VIRTUAL_ENV']}/bin/activate
+  paster --plugin=ckan datastore set-permissions -c #{node[:ckan][:config_dir]}/production.ini | sudo -u postgres psql --set ON_ERROR_STOP=1
+  EOH
 end
-execute "set permissions" do
-  cwd CKAN_DIR
-  command "paster --plugin=ckan datastore set-permissions -c #{node[:ckan][:config_dir]}/production.ini | sudo -u postgres psql --set ON_ERROR_STOP=1"
+bash "initialize ckan database in virtualenv" do
+  cwd "#{CKAN_DIR}"
+  code <<-EOH
+  source #{ENV['VIRTUAL_ENV']}/bin/activate
+  paster db init -c #{node[:ckan][:config_dir]}/production.ini
+  EOH
 end
 
 # CREATE FILE STORAGE DIRECTORY

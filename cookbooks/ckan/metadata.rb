@@ -7,7 +7,5 @@ license "AGPL"
 
 depends "apt"
 depends "git"
-depends "python"
 depends "postgresql"
-depends "database"
 depends "java"
